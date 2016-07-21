@@ -1,0 +1,6 @@
+# vagrantFiles
+/\.vagrant/
+*.pyc
+__pycache__
+Vagrantfile
+/\myfirstDjango/
