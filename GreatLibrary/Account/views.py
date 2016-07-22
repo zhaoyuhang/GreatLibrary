@@ -47,7 +47,6 @@ def login(request):
 				return render(request, 'login.html', {'login_form': LoginForm(), 'notice': notice})
 	return render(request, 'login.html', {'login_form': LoginForm()})
 
-@login_required(login_url='/login/')
 def logout(request):
 	if 'username' in request.session:
 		request.session['username'] = ""
@@ -79,8 +78,13 @@ def register(request):
 		account_form = AccountForm()
 		return render(request, 'register.html', {'account_form': account_form,})
 
-@login_required(login_url='/login/')
 def editdata(request):
+	if 'status' in request.session:
+		if request.session['status'] == False:
+			return render(request, 'login.html', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
+	else:
+		return render(request, 'login.html', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
+
 	this_user = UserInfo.objects.get(name=request.session['username'])
 	if request.method == 'POST':
 		dataform = DataForm(request.POST)
