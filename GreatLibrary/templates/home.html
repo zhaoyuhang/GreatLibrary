@@ -6,9 +6,12 @@
 <body>
 	Welcome to Great Library Community!&nbsp;
 	{% if logined %}
-	<a href="/logout/">logout</a>
+		<a href="/logout/">logout</a>&nbsp;<a href="/mydata/">edit data</a>&nbsp;
+		{% if 'username' in request.session %}
+			{{ request.session.username }}
+		{% endif %}
 	{% else %}
-	<a href="/login/">login</a>&nbsp;<a href="/register/">register</a>
+		<a href="/login/">login</a>&nbsp;<a href="/register/">register</a>&nbsp;visitor
 	{% endif %}
 	<br>
 	---------------book content----------------
