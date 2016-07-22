@@ -83,6 +83,8 @@ DATABASES = {
         'NAME': 'GreatLibrary',
         'USER': 'root',
         'PASSWORD': 'django',
+        'HOST': '223.72.82.229', #数据库主机
+        'PORT': '3306', #数据库端口
     }
 }
 
