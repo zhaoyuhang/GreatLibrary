@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>login</title>
+</head>
+<body>
+	{% if not notice %}
+		请输入正确的账号名和密码
+	{% else %}
+		{{ notice }}
+	{% endif %}
+	<form method="POST">
+		{% csrf_token %}
+		{{ login_form.as_p }}
+		<button type="submit" class="login">登录</button>
+	</form>
+</body>
+</html>

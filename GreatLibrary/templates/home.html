@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Great Library</title>
+</head>
+<body>
+	Welcome to Great Library Community!&nbsp;
+	{% if logined %}
+	<a href="/logout/">logout</a>
+	{% else %}
+	<a href="/login/">login</a>&nbsp;<a href="/register/">register</a>
+	{% endif %}
+	<br>
+	---------------book content----------------
+</body>
+</html>

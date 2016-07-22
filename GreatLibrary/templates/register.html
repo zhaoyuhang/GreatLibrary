@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>register</title>
+</head>
+<body>
+	{% if not notice %}
+		<p>register your account</p>
+	{% else %}
+		{{ notice }}
+	{% endif %}
+	<form method="POST">
+		{% csrf_token %}
+		{{ account_form.as_p }}
+		<button type="submit" class="register">注册用户</button>
+	</form>
+	<a href="/login/">已有账号？直接登录</a>
+</body>
+</html>
