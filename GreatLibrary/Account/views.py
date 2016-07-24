@@ -1,37 +1,16 @@
 from django.shortcuts import render
-from django import forms
 from django.db import models
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from .models import UserInfo
-import re
+from .forms import AccountForm, LoginForm, DataForm
 
-GENDER_CHOICE = (
-	('male', 'male'),
-	('female', 'female'),
-	)
-
-class AccountForm(forms.Form):
-	name = forms.CharField(max_length=20)
-	password = forms.CharField(max_length=30, widget=forms.PasswordInput)
-	email = forms.EmailField()
-
-class LoginForm(forms.Form):
-	name = forms.CharField(max_length=20)
-	password = forms.CharField(max_length=30, widget=forms.PasswordInput)
-
-class DataForm(forms.Form):
-	name = forms.CharField(max_length=20)
-	password = forms.CharField(max_length=30)
-	gender = forms.ChoiceField(choices = GENDER_CHOICE)
-	phone = forms.CharField(max_length=20)
-	email = forms.EmailField()
-	info = forms.CharField(max_length=255, widget=forms.Textarea)
-
-# Create your views here.
 def login(request):
-	if 'username' in request.session and 'status' in request.session:
+	if 'editdata_notice' in request.session:
+		del request.session['editdata_notice']
+	if 'status' in request.session:
 		if request.session['status'] == True:
-			return render(request, 'home.html', {'logined': True})
+			return HttpResponseRedirect('/home/')
+			
 	if request.method == "POST":
 		login_form = LoginForm(request.POST)
 		if login_form.is_valid():
@@ -41,7 +20,7 @@ def login(request):
 			if UserInfo.objects.filter(name__exact=name, password__exact=password):
 				request.session['username'] = name
 				request.session['status'] = True
-				return render(request, 'home.html', {'logined': 1, 'notice': name})
+				return HttpResponseRedirect('/home/')
 			else:
 				notice = "invalid name or password"
 				return render(request, 'login.html', {'login_form': LoginForm(), 'notice': notice})
@@ -52,9 +31,13 @@ def logout(request):
 		request.session['username'] = ""
 	if 'status' in request.session:
 		request.session['status'] = False
+	if 'editdata_notice' in request.session:
+		del request.session['editdata_notice']
 	return render(request, 'logout.html')
 
 def register(request):
+	if 'editdata_notice' in request.session:
+		del request.session['editdata_notice']
 	if 'status' in request.session:
 		if request.session["status"] == True:
 			notice = "you have already logged in"
@@ -62,21 +45,27 @@ def register(request):
 	if request.method == "POST":
 		account_form = AccountForm(request.POST)
 		if account_form.is_valid():
+			print '-------------getting data from form--------------'
 			data = account_form.clean()
 			name = data.get("name")
 			password = data.get("password")
 			email = data.get("email")
 			if UserInfo.objects.filter(name=name):   # if user already exist
 				notice = "account already exists, please login"
-				return render(request, 'register.html', {'account_form': prev_account, 'notice':notice})
+				print '-------------account already exists--------------'
+				return render(request, 'register.html', {'account_form': AccountForm(initial={
+						'name': name,
+						'password': password,
+						'email': email,
+					}), 'notice':notice})
+			print '-------------valid data, user registered--------------'
 			user = UserInfo(name=name, password=password, email=email)
 			user.save()
 			request.session['status'] = True
 			request.session['username'] = name
-			return render(request, 'home.html', {'logined': 1, 'notice': name})
-	else:
-		account_form = AccountForm()
-		return render(request, 'register.html', {'account_form': account_form,})
+			return HttpResponseRedirect('/home/')
+	return render(request, 'register.html', {'account_form': AccountForm()})
+
 
 def editdata(request):
 	if 'status' in request.session:
@@ -89,6 +78,7 @@ def editdata(request):
 	if request.method == 'POST':
 		dataform = DataForm(request.POST)
 		if dataform.is_valid():
+			print '-------------getting data from form--------------'
 			data = dataform.clean()
 			name = data.get('name')
 			password = data.get('password')
@@ -96,17 +86,20 @@ def editdata(request):
 			phone = data.get('phone')
 			email = data.get('email')
 			info = data.get('info')
-			if checkData(request, name, password, phone, email) == True:
-				 if 'editdata_notice' in request.session:
-				 	del request.session['editdata_notice']
-				 this_user.set_name(name)
-				 request.session['username'] = name
-				 this_user.set_password(password)
-				 this_user.set_gender(gender)
-				 this_user.set_phone(phone)
-				 this_user.set_email(email)
-				 this_user.set_info(info)
-				 this_user.save()
+			this_name = this_user.name
+			if checkData(request, name, password, phone, email, this_name):
+				if 'editdata_notice' in request.session:
+					del request.session['editdata_notice']
+				this_user.name = name
+				this_user.password = password
+				this_user.gender = gender
+				this_user.phone = phone
+				this_user.email = email
+				this_user.info = info
+				this_user.save()
+				request.session['username'] = name
+		else:
+			request.session['editdata_notice'] = 'Make sure every entry is not empty!'
 	return render(request, 'editdata.html', {'dataform': DataForm(initial={
 			'name': this_user.name,
 			'password': this_user.password,
@@ -116,25 +109,20 @@ def editdata(request):
 			'info': this_user.info
 		})})
 
-def checkData(request, name=None, password=None, phone=None, email=None):
-	if not name or len(name)==0:
-		request.session['editdata_notice'] = "invalid username"
-		return False
-	if not password or len(password) < 6:
-		request.session['editdata_notice'] = "password too short"
-		return False
-	if len(phone) < 7 or re.match(r'd+$', phone) == False:
-		request.session['editdata_notice'] = "invalid phonenumber"
-		return False
+def checkData(request, name=None, password=None, phone=None, email=None, this_name=None):
+	print '-------------checking data--------------'
 	if not email:
-		request.session['editdata_notice'] = "invalid email address"
+		request.session['editdata_notice'] = "invalid email address!"
+		print '-------------invalid email address--------------'
 		return False
-	this_user = UserInfo.objects.get(name=request.session['username'])
-	if name != this_user.get_name():
+	if name != this_name:
 		try:
 			UserInfo.objects.get(name=name)
-			request.session['editdata_notice'] = "username repeated"
+			request.session['editdata_notice'] = "username repeated!"
+			print '-------------username repeated--------------'
 			return False
 		except UserInfo.DoesNotExist:
 			return True
+	print '-------------valid data--------------'
 	return True
+	
