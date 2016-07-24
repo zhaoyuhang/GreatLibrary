@@ -1,3 +1,7 @@
+import sys, os
+sys.path.append('..')
+from GreatLibrary.settings import BASE_DIR
+
 from django.shortcuts import render
 from django.db import models
 from django.http import HttpResponseRedirect
@@ -70,13 +74,13 @@ def register(request):
 def editdata(request):
 	if 'status' in request.session:
 		if request.session['status'] == False:
-			return render(request, 'login.html', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
+			return HttpResponseRedirect('/account/login/', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
 	else:
 		return render(request, 'login.html', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
 
 	this_user = UserInfo.objects.get(name=request.session['username'])
 	if request.method == 'POST':
-		dataform = DataForm(request.POST)
+		dataform = DataForm(request.POST, request.FILES)
 		if dataform.is_valid():
 			print '-------------getting data from form--------------'
 			data = dataform.clean()
@@ -85,6 +89,7 @@ def editdata(request):
 			gender = data.get('gender')
 			phone = data.get('phone')
 			email = data.get('email')
+			headImage = data.get('headImage')
 			info = data.get('info')
 			this_name = this_user.name
 			if checkData(request, name, password, phone, email, this_name):
@@ -95,11 +100,14 @@ def editdata(request):
 				this_user.gender = gender
 				this_user.phone = phone
 				this_user.email = email
+				this_user.prevImage = this_user.headImage
+				deletePrevFile( str(this_user.prevImage) )
+				this_user.headImage = headImage
 				this_user.info = info
 				this_user.save()
 				request.session['username'] = name
 		else:
-			request.session['editdata_notice'] = 'Make sure every entry is not empty!'
+			request.session['editdata_notice'] = 'Make sure every entry is not empty or invalid!'
 	return render(request, 'editdata.html', {'dataform': DataForm(initial={
 			'name': this_user.name,
 			'password': this_user.password,
@@ -126,3 +134,7 @@ def checkData(request, name=None, password=None, phone=None, email=None, this_na
 	print '-------------valid data--------------'
 	return True
 	
+def deletePrevFile(filename):
+	if os.path.exists(BASE_DIR + '/' + filename):
+		os.remove(BASE_DIR + '/' + filename)
+		print '-------previous headimage file deleted------'

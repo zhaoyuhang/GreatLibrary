@@ -20,4 +20,5 @@ class DataForm(forms.Form):
 	gender = forms.ChoiceField(choices = GENDER_CHOICE)
 	phone = forms.IntegerField()
 	email = forms.EmailField()
+	headImage = forms.ImageField()
 	info = forms.CharField(max_length=255, widget=forms.Textarea)
