@@ -1,12 +1,12 @@
 import sys, os
 sys.path.append('..')
-from GreatLibrary.settings import BASE_DIR
 
 from django.shortcuts import render
 from django.db import models
 from django.http import HttpResponseRedirect
 from .models import UserInfo
 from .forms import AccountForm, LoginForm, DataForm
+from GreatLibrary.settings import BASE_DIR
 
 def login(request):
 	if 'editdata_notice' in request.session:
