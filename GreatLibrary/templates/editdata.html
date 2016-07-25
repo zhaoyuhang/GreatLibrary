@@ -2,12 +2,13 @@
 <html>
 <head>
 	<title>editdata</title>
+	<link rel="shortcut icon" href="../static/img/favicon.ico">
 </head>
 <body>
 	{% if 'editdata_notice' in request.session %}
 		NOTICE: {{ request.session.editdata_notice }}
 	{% endif %}
-	<form method="POST">
+	<form method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ dataform.as_p }}
 		<button type="submit" class="editdata">修改信息</button>

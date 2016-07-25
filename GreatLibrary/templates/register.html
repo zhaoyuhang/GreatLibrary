@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>register</title>
+	<link rel="shortcut icon" href="../static/img/favicon.ico">
 </head>
 <body>
 	{% if not notice %}
@@ -14,6 +15,6 @@
 		{{ account_form.as_p }}
 		<button type="submit" class="register">注册用户</button>
 	</form>
-	<a href="/login/">已有账号？直接登录</a>
+	<a href="/account/login/">已有账号？直接登录</a>
 </body>
 </html>

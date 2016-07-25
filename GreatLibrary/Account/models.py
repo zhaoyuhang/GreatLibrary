@@ -1,38 +1,41 @@
 from __future__ import unicode_literals
+
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
-# Create your models here.
+# create your models here.
+
+class Message(models.Model):
+	content 		= models.CharField(max_length=500)
+	relatedUser 	= models.OneToOneField('UserInfo')
+	sendTime 		= models.DateTimeField(default=timezone.now)
+	def __str__(self):
+		return self.content
+
+class Note(models.Model):
+	title 			= models.CharField(max_length=300)
+	content 		= models.CharField(max_length=3000)
+	def __str__(self):
+		return self.title
+
 class UserInfo(models.Model):
-	name 		= models.CharField(max_length=20)
-	password 	= models.CharField(max_length=50)
-	gender 		= models.CharField(max_length=10, default="male")
-	phone 		= models.CharField(max_length=20, default="")
-	info 		= models.CharField(max_length=255, default="")
-	email 		= models.EmailField()
-	score 		= models.FloatField(default=0)
-	isAdmin 	= models.BooleanField(default=False)
-	isBlocked 	= models.BooleanField(default=False)
-
+	name 			= models.CharField(max_length=20)
+	password 		= models.CharField(max_length=50)
+	gender 			= models.CharField(max_length=10, default="male")
+	phone 			= models.IntegerField(default=0)
+	info 			= models.CharField(max_length=255, default="your information")
+	email 			= models.EmailField()
+	prevImage 		= models.ImageField(upload_to='headImages/', default='headImages/default.jpg')
+	headImage 		= models.ImageField(upload_to='headImages/', default='headImages/default.jpg')
+	score 			= models.FloatField(default=0)
+	isAdmin 		= models.BooleanField(default=False)
+	isBlocked 		= models.BooleanField(default=True)
+	followList  	= models.ManyToManyField('self')
+	collectionList 	= models.ManyToManyField('Book.Book')
+	reviewList 		= models.ManyToManyField('Book.Review')
+	noteList 		= models.ManyToManyField('Note')
+	sendMessageList = models.ManyToManyField('Message', related_name="messages_you_send")
+	reveiveMessageList = models.ManyToManyField('Message', related_name="messages_you_received")
 	def __str__(self):
 		return self.name
-	def get_name(self):
-		return self.name
-	def set_name(self, name):
-		self.name = name
-		self.save()
-	def set_password(self, password):
-		self.password = password
-		self.save()
-	def set_gender(self, gender):
-		self.gender = gender
-		self.save()
-	def set_phone(self, phone):
-		self.phone = phone
-		self.save()
-	def set_email(self, email):
-		self.email = email
-		self.save()
-	def set_info(self, info):
-		self.info = info
-		self.save()
+

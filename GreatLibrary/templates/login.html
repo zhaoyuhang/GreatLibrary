@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>login</title>
+	<meta charset="utf-8">
+	<title>登录Great Library</title>
+	<meta name="description" content="GreateLibrary designed by Z,Y,L"/>
+
+	<meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+
+	<!-- Loading Bootstrap -->
+	<link href="../static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Loading Flat UI -->
+	<link href="../static/css/flat-ui.css" rel="stylesheet">
+	<link href="../static/css/home.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="../static/img/favicon.ico">
+	<script src="../static/js/vendor/jquery.min.js"></script>
+	<script src="../static/js/vendor/video.js"></script>
+	<script src="../static/js/flat-ui.min.js"></script>
+	<script src="../static/js/application.js"></script>
 </head>
 <body>
-	{% if not notice %}
-		请输入正确的账号名和密码
-	{% else %}
-		{{ notice }}
-	{% endif %}
-	<form method="POST">
-		{% csrf_token %}
-		{{ login_form.as_p }}
-		<button type="submit" class="login">登录</button>
-	</form>
-	<a href="/register/">没有帐号？点击注册</a>
+	<div class="container">
+		{% if not notice %}
+			请输入正确的账号名和密码
+		{% else %}
+			{{ notice }}
+		{% endif %}
+		<div class="login">
+		  <div class="login-screen">
+		    <div class="login-form">
+		    	<form method="POST">
+		    		{% csrf_token %}
+		    		{{ login_form.as_p }}
+		    		<button type="submit" class="Login">登录</button>
+		    	</form>
+		    	<a href="/account/register/">没有帐号？点击注册</a>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
 </body>
 </html>
