@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),               # admin url
     url(r'^home/', views.home, name="home"),        # home url
     url(r'^account/', include('Account.urls')),     # account related urls
+    url(r'^book/', include('Book.urls')),           # book related urls
 ]

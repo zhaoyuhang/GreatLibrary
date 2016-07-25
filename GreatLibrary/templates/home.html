@@ -111,6 +111,9 @@
 		</div> <!-- /demo-headline -->	
 
 		<hr/>
-		<a href="">---------------book content----------------</a>
+		<br>
+		{% for book in books %}
+			<a href='/book/detail/{{book.name}}'>{{ book.name }}</a>
+		{% endfor %}
 </body>
 </html>
