@@ -7,19 +7,18 @@
 
 	<meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
 
-	{% load staticfiles %}
 	<!-- Loading Bootstrap -->
-	<link href="../static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Loading Flat UI -->
-	<link href="../static/css/flat-ui.css" rel="stylesheet">
-	<link href="../static/css/home.css" rel="stylesheet">
+	<link href="/static/css/flat-ui.css" rel="stylesheet">
+	<link href="/static/css/home.css" rel="stylesheet">
 
-	<link rel="shortcut icon" href="../static/img/favicon.ico">
-	<script src="../static/js/vendor/jquery.min.js"></script>
-	<script src="../static/js/vendor/video.js"></script>
-	<script src="../static/js/flat-ui.min.js"></script>
-	<script src="../static/js/application.js"></script>
+	<link rel="shortcut icon" href="/static/img/favicon.ico">
+	<script src="/static/js/vendor/jquery.min.js"></script>
+	<script src="/static/js/vendor/video.js"></script>
+	<script src="/static/js/flat-ui.min.js"></script>
+	<script src="/static/js/application.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -113,7 +112,7 @@
 		<hr/>
 		<br>
 		{% for book in books %}
-			<a href='/book/detail/{{book.name}}'>{{ book.name }}</a>
+			<img src="{{ book.cover }}"><a href='/book/detail/{{book.name}}'>{{ book.name }}</a></img>		
 		{% endfor %}
 </body>
 </html>

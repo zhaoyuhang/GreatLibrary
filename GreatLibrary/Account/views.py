@@ -138,3 +138,7 @@ def deletePrevFile(filename):
 	if os.path.exists(BASE_DIR + '/' + filename):
 		os.remove(BASE_DIR + '/' + filename)
 		print '-------previous headimage file deleted------'
+
+def showdata(request, username):
+	user = UserInfo.objects.get(name=username)
+	return render(request, 'showdata.html', {'user': user})

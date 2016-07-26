@@ -32,7 +32,6 @@ class UserInfo(models.Model):
 	isBlocked 		= models.BooleanField(default=True)
 	followList  	= models.ManyToManyField('self')
 	collectionList 	= models.ManyToManyField('Book.Book')
-	reviewList 		= models.ManyToManyField('Book.Review')
 	noteList 		= models.ManyToManyField('Note')
 	sendMessageList = models.ManyToManyField('Message', related_name="messages_you_send")
 	reveiveMessageList = models.ManyToManyField('Message', related_name="messages_you_received")

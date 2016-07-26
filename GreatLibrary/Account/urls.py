@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^logout/', views.logout, name="logout"),
     url(r'^register/', views.register, name="register"),
     url(r'^editdata/', views.editdata, name="editdata"),
+    url(r'^data/(?P<username>(\w|\d| )+)/', views.showdata, name="showdata"),
 ]

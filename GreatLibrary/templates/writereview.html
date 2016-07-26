@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>write review</title>
+</head>
+<body>
+	<p>{{ bookname }}</p>
+	<form method="POST">
+		{% csrf_token %}
+		{{ reviewform.as_p }}
+		<input type="submit" name="submit_review" value="submit review">
+	</form>
+</body>
+</html>
