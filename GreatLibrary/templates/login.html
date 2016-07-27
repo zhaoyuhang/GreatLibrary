@@ -20,11 +20,13 @@
 </head>
 <body>
 	<div class="container">
-		{% if not notice %}
-			请输入正确的账号名和密码
-		{% else %}
-			{{ notice }}
-		{% endif %}
+		<div class="login_notice">
+			{% if not notice %}
+				请输入正确的账号名和密码
+			{% else %}
+				{{ notice }}
+			{% endif %}
+		</div>
 		<div class="login">
 		  <div class="login-screen">
 		    <div class="login-form">

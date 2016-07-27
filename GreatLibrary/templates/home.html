@@ -6,7 +6,6 @@
 	<meta name="description" content="GreateLibrary designed by Z,Y,L"/>
 	<meta name = "viewport" content = "width=device-width, initial-scale=1,maximum-scale=1">
 
-	{% load staticfiles %}
 	<!-- Loading Bootstrap -->
 	<link href="/static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -29,7 +28,7 @@
 	  	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 	  	          <span class="sr-only">Toggle navigation</span>
 	  	        </button>
-	  	        <a class="navbar-brand" href="#">
+	  	        <a class="navbar-brand" href="/account/data/{{request.session.username}}/">
 	  	        	{% if 'username' in request.session %}
 	  	        		{{ request.session.username }}
 	  	        	{% endif %}
@@ -37,9 +36,8 @@
 	  	      </div>
 	  	      <div class="collapse navbar-collapse" id="navbar-collapse-01">
 	  	        <ul class="nav navbar-nav navbar-left">
-	  	          <li><a href="/account/data/{{request.session.username}}/">我的主页</a></li>
 	  	          <li><a href="/account/logout/">退出</a></li>
-	  	          <li><a href="#fakelink">About Us</a></li>
+	  	          <li><a href="/home/">Home</a></li>
 	  	         </ul>
 	  	         <form class="navbar-form navbar-right" action="#" role="search">
 	  	          <div class="form-group">
@@ -70,7 +68,7 @@
 				        <ul class="nav navbar-nav navbar-left">
 					        <li><a href="/account/login/">登录</a></li>
 					        <li><a href="/account/register/">注册</a></li>
-					        <li><a href="#fakelink">About Us</a></li>
+					        <li><a href="/home/">Home</a></li>
 				        </ul>
 				        <form class="navbar-form navbar-right" action="#" role="search">
 				          	<div class="form-group">
@@ -98,69 +96,23 @@
 
 		<hr/>
 		
-		<div class="row demo-tiles">
-
-		  	<div class="col-xs-3">
-			    <div class="tile">
-			      	<img src="../static/img/icons/svg/compas.svg" alt="Compas" class="tile-image big-illustration">
-			      	<h3 class="tile-title">简·爱</h3>
-			      	<h7>作者：夏洛蒂·勃朗特</h4>
-			      	<p>简介</p>
-			      	<a class="btn btn-primary btn-large btn-block" href="">阅读</a>
-			    </div>
-		  	</div>
-
-		  	<div class="col-xs-3">
-			    <div class="tile">
-			      	<img src="../static/img/icons/svg/loop.svg" alt="Infinity-Loop" class="tile-image">
-			      	<h3 class="tile-title">Easy to Customize</h3>
-			      	<p>Vector-based shapes and minimum of layer styles.</p>
-			      	<a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
-			    </div>
-		  	</div>
-
-		  	<div class="col-xs-3">
-			    <div class="tile">
-			      	<img src="../static/img/icons/svg/pencils.svg" alt="Pensils" class="tile-image">
-			      	<h3 class="tile-title">Color Swatches</h3>
-			      	<p>Easy to add or change elementseeeeeeeee. </p>
-			      	<a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
-			    </div>
-		  	</div>
-
-		  	<div class="col-xs-3">
-			    <div class="tile tile-hot">
-			      	<img src="../static/img/icons/svg/ribbon.svg" alt="ribbon" class="tile-hot-ribbon">
-			      	<img src="../static/img/icons/svg/chat.svg" alt="Chat" class="tile-image">
-			      	<h3 class="tile-title">Free for Share</h3>
-			      	<p>Your likes, shares and comments helps us.</p>
-			      	<a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
-			    </div>
-		  	</div>	
-
+		<div class="row demo-tiles">  	
+		  	{% for book in books %}
+			  	<div class="col-xs-3">
+				    <div class="tile">
+				      	<img src="{{book.cover}}" alt="Compas" class="tile-image big-illustration">
+				      	<h3 class="tile-title">{{ book.name }}</h3>
+				      	<h7>作者：{{book.author}}</h7>
+				      	<a class="btn btn-primary btn-large btn-block" href='/book/detail/{{book.ISBN}}'>查看详情</a>
+				    </div>
+			  	</div>
+		  	{% endfor %}
 		</div> <!-- /tiles -->
 
-		<div >
-		  <ul class="pagination">
-		    <li class="previous"><a href="#fakelink" class="fui-arrow-left"></a></li>
-		    <li class="active"><a href="#fakelink">1</a></li>
-		    <li><a href="#fakelink">2</a></li>
-		    <li><a href="#fakelink">3</a></li>
-		    <li><a href="#fakelink">4</a></li>
-		    <li><a href="#fakelink">5</a></li>
-		    <li><a href="#fakelink">6</a></li>
-		    <li><a href="#fakelink">7</a></li>
-		    <li><a href="#fakelink">8</a></li>
-		    <li class="next"><a href="#fakelink" class="fui-arrow-right"></a></li>
-		  </ul>
-		</div> <!-- /pagination -->
-	{% for book in books %}
-		<a href='/book/detail/{{book.ISBN}}'>{{ book.name }}</a>
-	{% endfor %}
 		<div class="footer">
 			<div class="copyright">
       		Copyright  by  GreatLibrary  Group
-     		 </div>
+     		</div>
 		</div>
 	</div>	
 </body>

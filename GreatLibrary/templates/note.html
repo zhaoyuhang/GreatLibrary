@@ -34,7 +34,7 @@
 		        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 		          <span class="sr-only">Toggle navigation</span>
 		        </button>
-		        <a class="navbar-brand" href="#">
+		        <a class="navbar-brand" href="/account/data/{{request.session.username}}/">
 		        	{% if 'username' in request.session %}
 		        		{{ request.session.username }}
 		        	{% endif %}
@@ -65,7 +65,7 @@
       	</div>
 		{% endfor %}
 
-		<form method="POST">
+		<form method="POST" class="createNote">
 			{% csrf_token %}
 			 Title:{{ noteform.title }}{{ noteform.title.errors }}<br>
 			 Content:{{ noteform.content }}{{ noteform.content.errors }}<br>
