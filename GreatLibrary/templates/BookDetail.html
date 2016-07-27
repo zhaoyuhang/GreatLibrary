@@ -16,12 +16,12 @@
 {% for showreviewform in showreviewforms %}
 <form method="POST">
 	{% csrf_token %}
-	{{ showreviewform.form.content.label_tag }}{{ showreviewform.form.content }}<br>
-	{{ showreviewform.form.starnum.label_tag }}{{ showreviewform.form.starnum }}
-	{{ showreviewform.form.username.label_tag }}{{ showreviewform.form.username }}
+	{{ showreviewform.form.content }}<br>
+	{{ showreviewform.form.starnum }}
+	{{ showreviewform.form.username }}
 	<input type="submit" value="give star" name="give_star">
 </form>
-<a href="/account/data/{{showreviewform.name}}">{{ showreviewform.name }}</a>
+<a href="/account/data/{{showreviewform.name}}">查看写作者信息</a>
 {% endfor %}
 
 <form method="POST">
@@ -29,6 +29,7 @@
 	<input type="submit" value="write review" name="write_review">
 	<input type="submit" value="collect book" name="collect">
 </form>&nbsp;
+
 <a href="/home/">home</a>
 </body>
 </html>

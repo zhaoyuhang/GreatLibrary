@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 
 GENDER_CHOICE = (
 	('male', 'male'),
@@ -22,3 +23,10 @@ class DataForm(forms.Form):
 	email = forms.EmailField()
 	headImage = forms.ImageField()
 	info = forms.CharField(max_length=255, widget=forms.Textarea)
+
+class MessageForm(forms.Form):
+	content = forms.CharField(min_length=20, max_length=500, widget=forms.Textarea)
+
+class NoteForm(forms.Form):
+	title = forms.CharField(max_length=50)
+	content = forms.CharField(max_length=5000, widget=forms.Textarea)

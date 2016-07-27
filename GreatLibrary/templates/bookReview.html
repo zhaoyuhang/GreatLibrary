@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>
+		{% if 'username' in request.session %}
+			{{ request.session.username }}
+		{% endif %}
+		的书评
+	</title>
+	<meta name="description" content="GreateLibrary designed by Z,Y,L"/>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1,maximum-scale=1">
+
+	{% load staticfiles %}
+	<!-- Loading Bootstrap -->
+	<link href="/static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Loading Flat UI -->
+	<link href="/static/css/flat-ui.css" rel="stylesheet">
+	<link href="/static/css/home.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/css/userhome.css">
+	<link rel="shortcut icon" href="/static/img/favicon.ico">
+	<script src="/static/js/vendor/jquery.min.js"></script>
+	<script src="/static/js/flat-ui.min.js"></script>
+	<script src="/static/js/application.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		{% if 'status' in request.session and request.session.status == True %}
+		<div class="row demo-row">
+		  <div class="col-xs-12">
+		    <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+		      <div class="navbar-header">
+		        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+		          <span class="sr-only">Toggle navigation</span>
+		        </button>
+		        <a class="navbar-brand" href="#">
+		        	{% if 'username' in request.session %}
+		        		{{ request.session.username }}
+		        	{% endif %}
+		        </a>
+		      </div>
+		      <div class="collapse navbar-collapse" id="navbar-collapse-01">
+		        <ul class="nav navbar-nav navbar-left">
+		          <li><a href="/account/note/{{user.name}}">读书笔记</a></li>
+		          <li><a href="/account/review/{{user.name}}">书评</a></li>
+		          <li><a href="/account/collection/{{ user.name }}">收藏</a></li>
+		          <li><a href="/account/editdata/{{ user.name }}">修改个人信息</a></li>
+		          <li><a href="/account/logout/">退出</a></li>
+		          <li><a href="#fakelink">About Us</a></li>
+		        </ul>
+		      </div><!-- /.navbar-collapse -->
+		    </nav><!-- /navbar -->
+		  </div>
+		</div> <!-- /row -->
+		{% endif %}
+		{% for review in reviews %}
+		<div class="demo-content">
+		<div class="demo-type-example">
+	      	<span class="demo-text-note">{{review.related_book.name}}</span>
+	        <p>{{ review.content }}</p>
+	        <p>{{ review.starNum }}</p>
+      	</div>
+      	</div>
+      	{% endfor %}
+		<div class="footer">
+			<div class="copyright">
+      		Copyright  by  GreatLibrary  Group
+     		 </div>
+		</div>
+	</div>	
+</body>
+</html>

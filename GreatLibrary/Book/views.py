@@ -5,8 +5,8 @@ from .forms import ReviewForm, ShowReviewForm
 from Account.models import UserInfo
 
 # Create your views here.
-def bookDetail(request, bookname):
-	this_book = Book.objects.get(name=bookname)
+def bookDetail(request, book_isbn):
+	this_book = Book.objects.get(ISBN=book_isbn)
 	
 	if request.method == 'POST':
 		if 'give_star' in request.POST:
@@ -48,7 +48,7 @@ def bookDetail(request, bookname):
 		elif 'collect' in request.POST:
 			if 'status' in request.session and request.session['status'] == True:
 				print '----------add book into collection---------'
-				user = UserInfo.objects.get(request.session['username'])
+				user = UserInfo.objects.get(name=request.session['username'])
 				if this_book not in user.collectionList.all():
 					user.collectionList.add(this_book)
 

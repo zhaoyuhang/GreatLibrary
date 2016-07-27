@@ -5829,23 +5829,38 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   color: #7f8c8d;
   font-size: 13px;
   font-weight: 700;
+
   margin-top: -3px;
+}
+.logout {
+  margin-bottom: 77px;
+  padding: 38px 38px 267px;
+  position: relative;
+  height: 1000px;
+}
+.registerform {
+  margin-bottom: 77px;
+  padding: 38px 38px 267px;
+  position: relative;
+  height: 1000px;
 }
 .login {
   background: url(../img/login/imac.png) 0 0 no-repeat;
-  background-size: 940px 778px;
+  background-size: 100%;
   color: #ffffff;
   margin-bottom: 77px;
   padding: 38px 38px 267px;
   position: relative;
+  height: 1000px;
 }
 .login-screen {
   background-color: #1abc9c;
   min-height: 473px;
-  padding: 123px 199px 33px 306px;
-  width: 878px;
+  padding: 123px 240px 103px 240px;
+  width: 100%;
+  height: 580px;
 }
-.login-icon {
+.login-icon {}
   left: 200px;
   position: absolute;
   top: 160px;
@@ -5874,6 +5889,13 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   position: relative;
   border-radius: 6px;
 }
+
+.login-form form {
+  color:black;
+  text-align: center;
+} 
+
+
 .login-form .control-group {
   margin-bottom: 6px;
   position: relative;

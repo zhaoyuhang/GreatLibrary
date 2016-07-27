@@ -5,6 +5,16 @@
   border: 2px solid #E1E1E8;
   padding: 15px 21px;
 }
+
+.footer {
+  clear: both;
+  padding: 8px 0 20px;
+  margin-top: 10px;
+  border-top: 1px solid #e5e5e5;
+  line-height: 20px;
+  font-size: 14px;
+}
+
 span {
   text-align: center;
   margin: 0;
@@ -103,7 +113,8 @@ ol.linenums {
   margin-bottom: 0;
 }
 .container {
-  width: 90% !important;
+  width: 85% !important;
+  text-align: center;
 }
 .demo-headline {
   padding: 73px 0 110px;

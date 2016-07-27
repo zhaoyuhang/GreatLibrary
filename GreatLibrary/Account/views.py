@@ -4,9 +4,11 @@ sys.path.append('..')
 from django.shortcuts import render
 from django.db import models
 from django.http import HttpResponseRedirect
-from .models import UserInfo
-from .forms import AccountForm, LoginForm, DataForm
+from django.utils import timezone
+from .models import UserInfo, Note, Message
+from .forms import AccountForm, LoginForm, DataForm, MessageForm, NoteForm
 from GreatLibrary.settings import BASE_DIR
+from Book.models import Book, Review
 
 def login(request):
 	if 'editdata_notice' in request.session:
@@ -71,7 +73,7 @@ def register(request):
 	return render(request, 'register.html', {'account_form': AccountForm()})
 
 
-def editdata(request):
+def editdata(request, username):
 	if 'status' in request.session:
 		if request.session['status'] == False:
 			return HttpResponseRedirect('/account/login/', {'notice': 'no user logged in, please log in first', 'login_form': LoginForm()})
@@ -115,7 +117,7 @@ def editdata(request):
 			'phone': this_user.phone,
 			'email': this_user.email,
 			'info': this_user.info
-		})})
+		}), 'user':this_user})
 
 def checkData(request, name=None, password=None, phone=None, email=None, this_name=None):
 	print '-------------checking data--------------'
@@ -140,5 +142,48 @@ def deletePrevFile(filename):
 		print '-------previous headimage file deleted------'
 
 def showdata(request, username):
+	if 'status' in request.session and request.session['status'] == True:
+		user = UserInfo.objects.get(name=username)
+		if request.method == 'POST':
+			if 'leave_message' in request.POST:
+				if user.name != request.session['username']:
+					this_user = UserInfo.objects.get(name=request.session['username'])
+					msg = MessageForm(request.POST)
+					if msg.is_valid():
+						content = msg.clean().get('content')
+						message = Message(content=content, relatedUser=this_user, sendTime=timezone.now)
+						message.save()
+						this_user.sendMessageList.add(message)
+						user.reveiveMessageList.add(message)
+						this_user.save()
+						user.save()
+		messagelist = user.reveiveMessageList.all()
+		followlist = user.followList.all()
+		return render(request, 'userHome.html', {'user': user, 'messageform': MessageForm(), 'messagelist': messagelist, 'followlist': followlist})
+	else:
+		return HttpResponseRedirect('/account/login/')
+
+def note(request, username):
 	user = UserInfo.objects.get(name=username)
-	return render(request, 'showdata.html', {'user': user})
+	if request.method == 'POST':
+		if 'status' in request.session and request.session['status'] == True:
+			this_user = UserInfo.objects.get(name=request.session['username'])
+			if this_user == user:
+				note = NoteForm(request.POST)
+				if note.is_valid():
+					newnote = Note(title=note.clean().get('title'), content=note.clean().get('content'))
+					newnote.save()
+					this_user.noteList.add(newnote)
+					this_user.save()
+	notes = user.noteList.all()
+	return render(request, 'note.html', {'notes': notes, 'user':user, 'noteform': NoteForm()})
+
+def review(request, username):
+	user = UserInfo.objects.get(name=username)
+	reviews = Review.objects.filter(writer=user)
+	return render(request, 'bookReview.html', {'reviews': reviews, 'user': user})
+
+def collection(request, username):
+	user = UserInfo.objects.get(name=username)
+	collectionlist = user.collectionList.all()
+	return render(request, 'collection.html', {'user': user, 'collectionlist': collectionlist})
