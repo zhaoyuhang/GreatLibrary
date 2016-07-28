@@ -5,6 +5,59 @@
   border: 2px solid #E1E1E8;
   padding: 15px 21px;
 }
+
+.container .col-xs-12 {
+  padding-top: 15px;
+} 
+
+.container .col-xs-3 {
+  width: 25%;
+  height: 400px;
+}
+.login_notice {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+form p label {
+  width: 15%;
+  text-align: left;
+}
+
+.editdata {
+    width: 100px;
+    margin-left: 20%;
+}
+
+.editdataform form{
+  text-align: left;
+  width: 80%;
+}
+
+.editdataform form p input {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  width: inherit;
+}
+
+.editdataform form p label {
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 2.3;
+      width: 20%;
+      float: left;
+}
+
+.footer {
+  clear: both;
+  padding: 8px 0 20px;
+  margin-top: 10px;
+  border-top: 1px solid #e5e5e5;
+  line-height: 20px;
+  font-size: 14px;
+}
+
 span {
   text-align: center;
   margin: 0;
@@ -103,7 +156,8 @@ ol.linenums {
   margin-bottom: 0;
 }
 .container {
-  width: 90% !important;
+  width: 85% !important;
+  text-align: center;
 }
 .demo-headline {
   padding: 73px 0 110px;

@@ -1,1 +1,35 @@
-Bookdetail will be shown here.
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ book.name }}</title>
+</head>
+<body>
+<img src="{{ book.cover }}">
+<p>{{ book.name }}</p>
+<p>{{ book.author }}</p>
+<p>{{ book.ISBN }}</p>
+<p>{{ book.press }}</p>
+<p>{{ book.pressTime }}</p>
+<p>{{ book.grade }}</p>
+<p>{{ book.intro }}</p>
+
+{% for showreviewform in showreviewforms %}
+<form method="POST">
+	{% csrf_token %}
+	{{ showreviewform.form.content }}<br>
+	{{ showreviewform.form.starnum }}
+	{{ showreviewform.form.username }}
+	<input type="submit" value="give star" name="give_star">
+</form>
+<a href="/account/data/{{showreviewform.name}}">查看写作者信息</a>
+{% endfor %}
+
+<form method="POST">
+	{% csrf_token %}
+	<input type="submit" value="write review" name="write_review">
+	<input type="submit" value="collect book" name="collect">
+</form>&nbsp;
+
+<a href="/home/">home</a>
+</body>
+</html>
