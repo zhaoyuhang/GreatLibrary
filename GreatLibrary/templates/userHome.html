@@ -3,10 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		{% if 'username' in request.session %}
-			{{ request.session.username }}
-		{% endif %}
-		的个人主页
+		个人主页
 	</title>
 	<meta name="description" content="GreateLibrary designed by Z,Y,L"/>
 	<meta name = "viewport" content = "width=device-width, initial-scale=1,maximum-scale=1">
@@ -25,8 +22,6 @@
 </head>
 <body>
 	<div class="container">
-
-		{% if 'status' in request.session and request.session.status == True %}
 		<div class="row demo-row">
 		  <div class="col-xs-12">
 		    <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
@@ -34,10 +29,8 @@
 		        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 		          <span class="sr-only">Toggle navigation</span>
 		        </button>
-		        <a class="navbar-brand" href="/account/data/{{request.session.username}}/">
-		        	{% if 'username' in request.session %}
-		        		{{ request.session.username }}
-		        	{% endif %}
+		        <a class="navbar-brand" href="/account/data/{{ user.name }}/">
+		        	{{ user.name }}
 		        </a>
 		      </div>
 		      <div class="collapse navbar-collapse" id="navbar-collapse-01">
@@ -53,15 +46,15 @@
 		    </nav><!-- /navbar -->
 		  </div>
 		</div> <!-- /row -->
-		{% endif %}
 		<div class="main">
 			<div class="userData">
 				<div class="personal_left">
-					<img src="/static/{{ user.headImage }}">
+					<img src="/{{ user.headImage.url }}">
 				</div>
 				<div class="personal_right">
 					<h4 class="mpersonal">
 						<div class="left">{{ user.name }}</div>
+					
 					</h4>
 					<div class="personalinfo">
 						<span>性&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 别：</span><span itemprop="gender">{{user.gender}}</span><br>
@@ -69,25 +62,33 @@
 						<span>邮&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 箱：</span><span itemprop="email">{{user.email}}</span><br>
 						<span>个人介绍：</span><span itemprop="intro">{{user.intro}}</span><br><br>
 					</div>
+					{% if 'status' in request.session and request.session.status == True %}
+						{% if request.session.username != user.name %}
+						<form method="POST">
+							{% csrf_token %}
+							<input type="submit" name="follow" value="follow">
+						</form>
+						{% endif %}
+		        	{% endif %}
 				</div>
 			</div>
 			<div class="board">
 				<h4><a href="">我的留言板</a></h4>
 				<div class="guestbook_top">
-					<form>
-						<ul><li>{{ messageform.content }}{{ messageform.content.error }}</li>
-						<ul><li>{{ messageform.mesge_time }}{{ messageform.message_time.error }}</li>
+					<form method="POST">
+					{% csrf_token %}
+						<ul><li>{{ messageform.content }}{{ message.content.errors }}</li>
 						<ul><li><input value="leave message" name="leave_message" type="submit"></li></ul>
 					</form>
 				</div>
 				<div id="messages">
 				{% for message in messagelist %}
 				<div class="message">
-			    	<div class="guestbook_left"><a class="headpic"><img src="/static/{{ message.relatedUser.cover }}"></a></div>
+			    	<div class="guestbook_left"><a class="headpic"><img src="/{{ message.sender.headImage.url }}"></a></div>
 			    	<div class="content">
-			    		<a class="u" href="">message.relatedUser.name</a>
-			    		<em>message.sendTime</em>
-			    		<p>message.content</p>
+			    		<a class="u" href="">{{ message.sender.name }}</a>
+			    		<em>{{ message.sendTime }}</em>
+			    		<p>{{ message.content }}</p>
 			      	</div>
 			 	</div>
 				{% endfor %}
@@ -96,7 +97,7 @@
 		</div>
 		<div class="sidebars">
 			<div class="following">
-				<h4><a href="">我关注的人</a></h4>
+				<h4><a href="">关注</a></h4>
 				{% for people in followlist %}
 					<a href="/account/data/{{people.name}}">{{ people.name }}</a><br>
 				{% endfor %}

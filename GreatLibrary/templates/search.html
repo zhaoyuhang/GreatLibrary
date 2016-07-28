@@ -1,4 +1,17 @@
 search page
-<form method = "POST">
-	{{request.session}}
-</form>
+<br>
+{% for book in by_bookname %}
+	{{ book.name }}<br>
+{% endfor %}
+<hr>
+{% for user in by_username %}
+	{{ user.name }}<br>
+{% endfor %}
+<hr>
+{% for book in by_isbn %}
+	{{ book.name}}
+{% endfor %}
+<hr>
+{% for book in by_tag %}
+	{{ book.name }}
+{% endfor %}

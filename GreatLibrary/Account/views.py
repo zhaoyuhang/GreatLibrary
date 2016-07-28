@@ -143,21 +143,20 @@ def deletePrevFile(filename):
 
 def showdata(request, username):
 	if 'status' in request.session and request.session['status'] == True:
+		this_user = UserInfo.objects.get(name=request.session['username'])
 		user = UserInfo.objects.get(name=username)
 		if request.method == 'POST':
 			if 'leave_message' in request.POST:
 				if user.name != request.session['username']:
-					this_user = UserInfo.objects.get(name=request.session['username'])
-					msg = MessageForm(request.POST)
-					if msg.is_valid():
-						content = msg.clean().get('content')
-						message = Message(content=content, relatedUser=this_user, sendTime=timezone.now)
-						message.save()
-						this_user.sendMessageList.add(message)
-						user.reveiveMessageList.add(message)
-						this_user.save()
-						user.save()
-		messagelist = user.reveiveMessageList.all()
+					content = request.POST['content'].encode('utf-8')
+					print '----------message contnet: '+content+'--------------'
+					message = Message(content=content, sender=this_user, receiver=user)
+					message.save()
+			if 'follow' in request.POST:
+				if user not in this_user.followList.all():
+					this_user.followList.add(user)
+					this_user.save()
+		messagelist = Message.objects.filter(receiver=user)
 		followlist = user.followList.all()
 		return render(request, 'userHome.html', {'user': user, 'messageform': MessageForm(), 'messagelist': messagelist, 'followlist': followlist})
 	else:

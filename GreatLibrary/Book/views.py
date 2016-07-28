@@ -25,7 +25,7 @@ def bookDetail(request, book_isbn):
 				user = UserInfo.objects.get(name=request.session['username'])
 				try:
 					target = Review.objects.get(writer=user, related_book=this_book)
-				except UserInfo.DoesNotExist:
+				except Review.DoesNotExist:
 					target = None
 				if target == None:		# user didn't write a review to this book
 					print '--------write review to book--------------'

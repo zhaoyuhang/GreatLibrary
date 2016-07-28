@@ -7,7 +7,8 @@ from django.utils import timezone
 
 class Message(models.Model):
 	content 		= models.CharField(max_length=500)
-	relatedUser 	= models.OneToOneField('UserInfo')
+	sender 			= models.ForeignKey('UserInfo', related_name='sender', default=None)
+	receiver 		= models.ForeignKey('UserInfo', related_name='receiver', default=None)
 	sendTime 		= models.DateTimeField(default=timezone.now)
 	def __str__(self):
 		return self.content
@@ -25,16 +26,14 @@ class UserInfo(models.Model):
 	phone 			= models.IntegerField(default=0)
 	info 			= models.CharField(max_length=255, default="your information")
 	email 			= models.EmailField()
-	prevImage 		= models.CharField(default='headImages/default.jpg', max_length=100)
-	headImage 		= models.CharField(default='headImages/default.jpg', max_length=100)
+	prevImage 		= models.ImageField(default='static/headImages/default.jpg')
+	headImage 		= models.ImageField(default='static/headImages/default.jpg', upload_to='static/headImages')
 	score 			= models.FloatField(default=0)
 	isAdmin 		= models.BooleanField(default=False)
 	isBlocked 		= models.BooleanField(default=True)
 	followList  	= models.ManyToManyField('self')
 	collectionList 	= models.ManyToManyField('Book.Book')
 	noteList 		= models.ManyToManyField('Note')
-	sendMessageList = models.ManyToManyField('Message', related_name="messages_you_send")
-	reveiveMessageList = models.ManyToManyField('Message', related_name="messages_you_received")
 	def __str__(self):
 		return self.name
 
